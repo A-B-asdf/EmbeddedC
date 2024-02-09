@@ -26,7 +26,8 @@ int loadTable(TableT *table, char* filename); // загрузка таблицы
 int saveTable(TableT *table, char* filename); // сохранение таблицы в текстовый файл
 void printTable(TableT *table); // просмотр таблицы
 void sortTable(TableT *table, int field); // сортировка таблицы по возрастанию заданного поля
-struct Record* searchRecord(TableT *table, int field, int value); // поиск записи с заданным значением поля
+int searchRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
+int searchNearestRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
 void deleteRecord(TableT *table, int index); // удаление записи
 void editRecord(TableT *table, int index, struct Record* record); // изменение (редактирование) записи
 int countByGroupNumber(TableT *table, int group_number); // подсчет записей по номеру группы

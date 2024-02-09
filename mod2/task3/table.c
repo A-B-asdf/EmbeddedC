@@ -162,3 +162,65 @@ int (*comparators[4])(const void *a, const void *b) = {
 void sortTable(TableT *table, int field) {
     qsort(table->records, table->size, sizeof(struct Record), comparators[field]);
 }
+
+void *num2Field(const struct Record *record, int field) {
+    switch (field) {
+    case 0:
+        return (void *)record->surname;
+    case 1:
+        return (void *)&(record->studentID);
+    case 2:
+        return (void *)record->faculty;
+    case 3:
+        return (void *)&(record->group);
+    default:
+        return NULL;
+    }
+}
+
+int compareWithValue(const struct Record *record, const void *value, int field) {
+    switch (field) {
+    case 0:
+        return strcmp(record->surname, (char *)value);
+    case 1:
+        return record->studentID - *((int *)value);
+    case 2:
+        return strcmp(record->faculty, (char *)value);
+    case 3:
+        return record->group - *((int *)value);
+    default:
+        return 0;
+    }
+}
+
+int searchRecord(TableT *table, int field, void *value) {
+    for (int index = 0; index < table->size; ++index) {
+        if (compareWithValue(table->records + index, value, field) == 0) {
+            return index;
+        }
+    }
+    return -1;
+}
+
+int searchNearestRecord(TableT *table, int field, void *value) {
+    TableT *table_copy = (TableT*)malloc(sizeof(TableT));
+    table_copy->records = (struct Record*)malloc(table->size * sizeof(struct Record));
+    memcpy(table_copy->records, table->records, table->size * sizeof(struct Record));
+    table_copy->size = table->size;
+    table_copy->capacity = table->capacity;
+    
+    sortTable(table_copy, field);
+
+    int l = 0, r = table_copy->size;
+    while (l < r) {
+        int mid = (l + r) / 2;
+        if(compareWithValue(table_copy->records + l, value, field) <= 0) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+    int index = searchRecord(table, field, num2Field(table_copy->records + l, field));
+    freeTable(table_copy);
+    return index;
+}
