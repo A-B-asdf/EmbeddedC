@@ -86,3 +86,47 @@ int saveTable(TableT *table, char* filename) {
     return 0;
 }
 
+int inputRecord(TableT *table) {
+    printf("Enter a record in the following format: Surname;Student ID;Faculty;GroupNumber\n");
+    struct Record new_rec;
+    char input[100];
+    fgets(input, sizeof(input), stdin);
+    while (sscanf(input, "%[^;];%ld;%[^;];%d", 
+            new_rec.surname, &(new_rec.studentID), new_rec.faculty, &(new_rec.group)) != 4) {
+        printf("Input error\n");
+        fgets(input, sizeof(input), stdin);
+    }
+    if (addRecord(table, &new_rec) != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+void printTable(TableT *table) {
+    for (int i = 0; i < table->size; ++i) {
+        printf("%s;%ld;%s;%d\n", 
+            table->records[i].surname, 
+            table->records[i].studentID, 
+            table->records[i].faculty, 
+            table->records[i].group);
+    }
+}
+
+void deleteRecord(TableT *table, int index) {
+    if (index >= table->size) {
+        fprintf(stderr, "Index out of range\n");
+        return;
+    }
+    for (int i = index; i < table->size; ++i) {
+        memcpy(table->records + i - 1, table->records + i, sizeof(struct Record));
+    }
+    table->size--;
+}
+
+void editRecord(TableT *table, int index, struct Record* record) {
+    if (index >= table->size) {
+        fprintf(stderr, "Index out of range\n");
+        return;
+    }
+    memcpy(&(table->records[index]), record, sizeof(struct Record));
+}
