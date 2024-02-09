@@ -224,3 +224,19 @@ int searchNearestRecord(TableT *table, int field, void *value) {
     freeTable(table_copy);
     return index;
 }
+
+int countByGroupNumber(TableT *table, int group_number) {
+    int counter = 0;
+    for (int i = 0; i < table->size; ++i) {
+        if (table->records[i].group == group_number) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+void processRecords(TableT *table, void (*processFunc)(struct Record*)) {
+    for (int i = 0; i < table->size; ++i) {
+        processFunc(table->records + i);
+    }
+}

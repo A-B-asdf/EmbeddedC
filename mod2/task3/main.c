@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+void func(struct Record *record) {
+    printf("WOW\n");
+}
+
 int main() {
     TableT *table = (TableT*)malloc(sizeof(TableT));
     initTable(table);
@@ -33,6 +37,7 @@ int main() {
     deleteRecord(table, 1);
     printTable(table);
     printf("\n");
+    processRecords(table, func);
     freeTable(table);
     return 0;
 }
