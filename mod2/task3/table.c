@@ -130,3 +130,35 @@ void editRecord(TableT *table, int index, struct Record* record) {
     }
     memcpy(&(table->records[index]), record, sizeof(struct Record));
 }
+
+int compareRecords1(const void *a, const void *b) {
+    const struct Record *record1 = (const struct Record *)a;
+    const struct Record *record2 = (const struct Record *)b;
+    return strcmp(record1->surname, record2->surname);
+}
+
+int compareRecords2(const void *a, const void *b) {
+    const struct Record *record1 = (const struct Record *)a;
+    const struct Record *record2 = (const struct Record *)b;
+    return record1->studentID - record2->studentID;
+}
+
+int compareRecords3(const void *a, const void *b) {
+    const struct Record *record1 = (const struct Record *)a;
+    const struct Record *record2 = (const struct Record *)b;
+    return strcmp(record1->faculty, record2->faculty);
+}
+
+int compareRecords4(const void *a, const void *b) {
+    const struct Record *record1 = (const struct Record *)a;
+    const struct Record *record2 = (const struct Record *)b;
+    return record1->group - record2->group;
+}
+
+int (*comparators[4])(const void *a, const void *b) = {
+    &compareRecords1, &compareRecords2, &compareRecords3, &compareRecords4
+};
+
+void sortTable(TableT *table, int field) {
+    qsort(table->records, table->size, sizeof(struct Record), comparators[field]);
+}

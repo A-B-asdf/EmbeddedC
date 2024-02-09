@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdlib.h>
 
 #define SURNAME_LEN 50
 #define FACULTY_LEN 50
