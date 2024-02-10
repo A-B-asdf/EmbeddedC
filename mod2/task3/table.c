@@ -103,8 +103,13 @@ int inputRecord(TableT *table) {
 }
 
 void printTable(TableT *table) {
+    // Заголовок таблицы
+    printf("Surname        | StudentID | Faculty                         | Group\n");
+    printf("---------------------------------------------------------------------\n");
+
+    // Вывод записей
     for (int i = 0; i < table->size; ++i) {
-        printf("%s;%ld;%s;%d\n", 
+        printf("%-14s | %-9ld | %-31s | %d\n", 
             table->records[i].surname, 
             table->records[i].studentID, 
             table->records[i].faculty, 
