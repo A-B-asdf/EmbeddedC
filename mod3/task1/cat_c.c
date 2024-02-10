@@ -12,6 +12,7 @@ int main(int argc, char **argv) {
 	while ((n = read(fd, buf, BUFSIZ)) > 0) {
 		write(1, buf, n);
 	}
+	close(fd);
 	return 0;
 }
 
