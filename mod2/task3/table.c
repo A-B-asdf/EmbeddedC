@@ -131,32 +131,35 @@ void editRecord(TableT *table, int index, struct Record* record) {
     memcpy(&(table->records[index]), record, sizeof(struct Record));
 }
 
-int compareRecords1(const void *a, const void *b) {
+int compareSurname(const void *a, const void *b) {
     const struct Record *record1 = (const struct Record *)a;
     const struct Record *record2 = (const struct Record *)b;
     return strcmp(record1->surname, record2->surname);
 }
 
-int compareRecords2(const void *a, const void *b) {
+int compareID(const void *a, const void *b) {
     const struct Record *record1 = (const struct Record *)a;
     const struct Record *record2 = (const struct Record *)b;
     return record1->studentID - record2->studentID;
 }
 
-int compareRecords3(const void *a, const void *b) {
+int compareFaculty(const void *a, const void *b) {
     const struct Record *record1 = (const struct Record *)a;
     const struct Record *record2 = (const struct Record *)b;
     return strcmp(record1->faculty, record2->faculty);
 }
 
-int compareRecords4(const void *a, const void *b) {
+int compareGroup(const void *a, const void *b) {
     const struct Record *record1 = (const struct Record *)a;
     const struct Record *record2 = (const struct Record *)b;
     return record1->group - record2->group;
 }
 
 int (*comparators[4])(const void *a, const void *b) = {
-    &compareRecords1, &compareRecords2, &compareRecords3, &compareRecords4
+    &compareSurname, 
+    &compareID, 
+    &compareFaculty, 
+    &compareGroup
 };
 
 void sortTable(TableT *table, int field) {
@@ -225,10 +228,10 @@ int searchNearestRecord(TableT *table, int field, void *value) {
     return index;
 }
 
-int countByGroupNumber(TableT *table, int group_number) {
+int countByCondition(TableT *table, int (*condition)(struct Record*)) {
     int counter = 0;
     for (int i = 0; i < table->size; ++i) {
-        if (table->records[i].group == group_number) {
+        if (condition(table->records + i)) {
             counter++;
         }
     }

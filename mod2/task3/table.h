@@ -30,6 +30,6 @@ int searchRecord(TableT *table, int field, void *value); // поиск запи�
 int searchNearestRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
 void deleteRecord(TableT *table, int index); // удаление записи
 void editRecord(TableT *table, int index, struct Record* record); // изменение (редактирование) записи
-int countByGroupNumber(TableT *table, int group_number); // подсчет записей по номеру группы
+int countByCondition(TableT *table, int (*condition)(struct Record*)); // подсчет записей по номеру группы
 void processRecords(TableT *table, void (*processFunc)(struct Record*)); // обработка записей заданной фукнцией
 void freeTable(TableT *table);
