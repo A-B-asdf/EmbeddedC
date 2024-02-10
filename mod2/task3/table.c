@@ -76,7 +76,7 @@ int saveTable(TableT *table, char* filename) {
         fprintf(stderr, "Error opening file\n");
         return 1;
     }
-    for (int i = 0; i < table->size; ++i) {
+    for (size_t i = 0; i < table->size; ++i) {
         fprintf(file, "%s;%ld;%s;%d\n", 
             table->records[i].surname, 
             table->records[i].studentID, 
@@ -108,7 +108,7 @@ void printTable(TableT *table) {
     printf("---------------------------------------------------------------------\n");
 
     // Вывод записей
-    for (int i = 0; i < table->size; ++i) {
+    for (size_t i = 0; i < table->size; ++i) {
         printf("%-14s | %-9ld | %-31s | %d\n", 
             table->records[i].surname, 
             table->records[i].studentID, 
@@ -117,18 +117,18 @@ void printTable(TableT *table) {
     }
 }
 
-void deleteRecord(TableT *table, int index) {
+void deleteRecord(TableT *table, size_t index) {
     if (index >= table->size) {
         fprintf(stderr, "Index out of range\n");
         return;
     }
-    for (int i = index; i < table->size; ++i) {
+    for (size_t i = index; i < table->size; ++i) {
         memcpy(table->records + i - 1, table->records + i, sizeof(struct Record));
     }
     table->size--;
 }
 
-void editRecord(TableT *table, int index, struct Record* record) {
+void editRecord(TableT *table, size_t index, struct Record* record) {
     if (index >= table->size) {
         fprintf(stderr, "Index out of range\n");
         return;
@@ -145,7 +145,7 @@ int compareSurname(const void *a, const void *b) {
 int compareID(const void *a, const void *b) {
     const struct Record *record1 = (const struct Record *)a;
     const struct Record *record2 = (const struct Record *)b;
-    return record1->studentID - record2->studentID;
+    return record1->studentID - record2->studentID;  // type conversion :(
 }
 
 int compareFaculty(const void *a, const void *b) {
@@ -191,7 +191,7 @@ int compareWithValue(const struct Record *record, const void *value, int field) 
     case 0:
         return strcmp(record->surname, (char *)value);
     case 1:
-        return record->studentID - *((int *)value);
+        return record->studentID - *((long int *)value);  // type conversion :(
     case 2:
         return strcmp(record->faculty, (char *)value);
     case 3:
@@ -201,8 +201,8 @@ int compareWithValue(const struct Record *record, const void *value, int field) 
     }
 }
 
-int searchRecord(TableT *table, int field, void *value) {
-    for (int index = 0; index < table->size; ++index) {
+size_t searchRecord(TableT *table, int field, void *value) {
+    for (size_t index = 0; index < table->size; ++index) {
         if (compareWithValue(table->records + index, value, field) == 0) {
             return index;
         }
@@ -210,7 +210,7 @@ int searchRecord(TableT *table, int field, void *value) {
     return -1;
 }
 
-int searchNearestRecord(TableT *table, int field, void *value) {
+size_t searchNearestRecord(TableT *table, int field, void *value) {
     TableT *table_copy = (TableT*)malloc(sizeof(TableT));
     table_copy->records = (struct Record*)malloc(table->size * sizeof(struct Record));
     memcpy(table_copy->records, table->records, table->size * sizeof(struct Record));
@@ -219,23 +219,23 @@ int searchNearestRecord(TableT *table, int field, void *value) {
     
     sortTable(table_copy, field);
 
-    int l = 0, r = table_copy->size;
+    size_t l = 0, r = table_copy->size;
     while (l < r) {
-        int mid = (l + r) / 2;
+        size_t mid = (l + r) / 2;
         if(compareWithValue(table_copy->records + l, value, field) <= 0) {
             l = mid;
         } else {
             r = mid;
         }
     }
-    int index = searchRecord(table, field, num2Field(table_copy->records + l, field));
+    size_t index = searchRecord(table, field, num2Field(table_copy->records + l, field));
     freeTable(table_copy);
     return index;
 }
 
-int countByCondition(TableT *table, int (*condition)(struct Record*)) {
-    int counter = 0;
-    for (int i = 0; i < table->size; ++i) {
+size_t countByCondition(TableT *table, int (*condition)(struct Record*)) {
+    size_t counter = 0;
+    for (size_t i = 0; i < table->size; ++i) {
         if (condition(table->records + i)) {
             counter++;
         }
@@ -244,7 +244,7 @@ int countByCondition(TableT *table, int (*condition)(struct Record*)) {
 }
 
 void processRecords(TableT *table, void (*processFunc)(struct Record*)) {
-    for (int i = 0; i < table->size; ++i) {
+    for (size_t i = 0; i < table->size; ++i) {
         processFunc(table->records + i);
     }
 }

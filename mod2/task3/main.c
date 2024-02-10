@@ -25,21 +25,21 @@ int main() {
     sortTable(table, 0);  // сортировка по первому полю
     printTable(table);  // просмотр таблицы
     printf("\n");
-    int index = searchRecord(table, 0, (void*) "Ivanov");  // поиск Иванова
-    printf("Index of \"Ivanov\": %d\n", index);
+    size_t index = searchRecord(table, 0, (void*) "Ivanov");  // поиск Иванова
+    printf("Index of \"Ivanov\": %ld\n", index);
     int id = 4;
     index = searchRecord(table, 1, (void*) &id);  // поиск по ID
-    printf("Index of student with ID %d: %d\n", id, index);
+    printf("Index of student with ID %d: %ld\n", id, index);
     int group = 21202;
     index = searchRecord(table, 3, (void*) &group);  // поиск по номеру группы
-    printf("Index of student with group %d: %d\n", group, index);
+    printf("Index of student with group %d: %ld\n", group, index);
     index = searchNearestRecord(table, 0, (void*) "Petrog");  // поиск с наиболее близким значением
-    printf("Index of student with surname nearest to \"Petrog\": %d\n", index);
+    printf("Index of student with surname nearest to \"Petrog\": %ld\n", index);
     editRecord(table, 1, table->records + 0);  // редактирование записи
     printTable(table);  // просмотр таблицы
     printf("\n");
-    int ammount = countByCondition(table, myCondition);  // подсчет по условию
-    printf("Ammount of students with group 4: %d\n", ammount);
+    size_t ammount = countByCondition(table, myCondition);  // подсчет по условию
+    printf("Ammount of students with group 4: %ld\n", ammount);
     deleteRecord(table, 1);
     printTable(table);
     printf("\n");

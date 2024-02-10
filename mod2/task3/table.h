@@ -26,10 +26,10 @@ int loadTable(TableT *table, char* filename); // загрузка таблицы
 int saveTable(TableT *table, char* filename); // сохранение таблицы в текстовый файл
 void printTable(TableT *table); // просмотр таблицы
 void sortTable(TableT *table, int field); // сортировка таблицы по возрастанию заданного поля
-int searchRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
-int searchNearestRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
-void deleteRecord(TableT *table, int index); // удаление записи
-void editRecord(TableT *table, int index, struct Record* record); // изменение (редактирование) записи
-int countByCondition(TableT *table, int (*condition)(struct Record*)); // подсчет записей по номеру группы
+size_t searchRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
+size_t searchNearestRecord(TableT *table, int field, void *value); // поиск записи с заданным значением поля
+void deleteRecord(TableT *table, size_t index); // удаление записи
+void editRecord(TableT *table, size_t index, struct Record* record); // изменение (редактирование) записи
+size_t countByCondition(TableT *table, int (*condition)(struct Record*)); // подсчет записей по номеру группы
 void processRecords(TableT *table, void (*processFunc)(struct Record*)); // обработка записей заданной фукнцией
 void freeTable(TableT *table);
